@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from psusphere.views import HomePageView, OrganizationList
 from psusphere import views
+from psusphere.views import HomePageView, OrganizationList, OrganizationCreateView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name="home"),
-    path('orglst', OrganizationList.as_view(), name='org_list')
+    path('orglist/', OrganizationList.as_view(), name='org_list'),
+    path('orglist/add/', OrganizationCreateView.as_view(), name='org_add')
 ]
