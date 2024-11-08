@@ -17,7 +17,7 @@
                         <div class="col-md-6">
                             <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'org_list' %}">
                                 <div class="input-group">
-                                    <input type="text" placeholder="Search ..." class="form-control" name="q"/>
+                                    <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{request.GET.q}}"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">
                                             <i class="la la-search search-icon"></i>
@@ -39,14 +39,17 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">College</th>
                                     <th scope="col">Description</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <p>{{ object_list }}</p>
                                 {% for object in object_list %}
                                     <tr>
                                         <td>{{ object.name }}</td>
                                         <td>{{ object.college }}</td>
                                         <td>{{ object.description }}</td>
+
                                     </tr>
                                 {% endfor %}
                             </tbody>
