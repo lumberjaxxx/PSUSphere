@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView 
 from django.views.generic.edit import CreateView 
-from psusphere.models import Organization
+from psusphere.models import Organization, Student, OrgMember, Program, College
 from psusphere.forms import OrganizationForm
 from django.urls import reverse_lazy
 from typing import Any
@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
 method_decorator(login_required, name='dispatch')
+
 class HomePageView(ListView):
     model = Organization
     context_object_name = 'home'
@@ -35,3 +36,27 @@ class OrganizationCreateView(CreateView):
     form_class = OrganizationForm
     template_name = "org_form.html"
     success_url = reverse_lazy('org_list')
+
+class OrgMemberList(ListView):
+    model = OrgMember
+    context_object_name = "org_mem"
+    template_name = "org_mem.html"
+    paginated = 2
+
+class StudentList(ListView):
+    model = Student
+    context_object_name = "student"
+    template_name = "student.html"
+    paginated = 5
+
+class CollegeList(ListView):
+    model = College
+    context_object_name = "college"
+    template_name = "college.html"
+    paginated = 3
+
+class ProgramList(ListView):
+    model = Program
+    context_object_name = "program"
+    template_name = "program.html"
+    paginated = 2
