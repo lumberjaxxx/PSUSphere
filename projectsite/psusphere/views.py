@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.views.generic.list import ListView 
-from django.views.generic.edit import CreateView 
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView
 from psusphere.models import Organization, Student, OrgMember, Program, College
 from psusphere.forms import OrganizationForm, OrgMemberForm, StudentForm, ProgramForm, CollegeForm
 from django.urls import reverse_lazy
@@ -41,7 +41,6 @@ class OrganizationCreateView(CreateView):
     template_name = "org_form.html"
     success_url = reverse_lazy('org_list')
 
-
     def form_valid(self,form):
         Student = form.instance.Student
         messages.success(self.request, f'{Student} has been successfully updated.')
@@ -49,14 +48,12 @@ class OrganizationCreateView(CreateView):
         return super().form_valid(form)
 
 
-
-    # def get_queryset(self, *args, **kwargs):
-    #     qs = super(OrganizationCreateView, self).get_queryset(*args, **kwargs)
-    #     if self.request.GET.get('q') != None:
-    #         query = self.request.GET.get('q')
-    #         qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            
-    #     return qs
+class OrganizationUpdateView(UpdateView):
+    model = Organization
+    fields = "__all__"
+    context_object_name = "organization"
+    template_name = "org_edit_form.html"
+    success_url = reverse_lazy('org_list')
 
 
 ###############Organization member starts #########################
@@ -89,6 +86,13 @@ class OrgMemberCreateView(CreateView):
         messages.success(self.request, f'{Student} has been successfully updated.')
 
         return super().form_valid(form)
+
+class OrgMemberUpdateView(UpdateView):
+    model = OrgMember
+    fields = "__all__"
+    context_object_name = "org_mem"
+    template_name = "orgmem_form.html"
+    success_url = reverse_lazy('org_mem')
 
     
 ############# Student list starts#######################333333
@@ -128,6 +132,14 @@ class StudentCreateView(CreateView):
 
 
 
+class StudentUpdateView(UpdateView):
+    model = Student
+    fields = "__all__"
+    context_object_name = "student"
+    template_name = "stud_edit_form.html"
+    success_url = reverse_lazy('student')
+
+
 ##################### College Starts ########################33
 class CollegeList(ListView):
     model = College
@@ -158,6 +170,14 @@ class CollegeCreateView(CreateView):
 
 
 
+class CollegeUpdateView(UpdateView):
+    model = College
+    fields = "__all__"
+    context_object_name = "college"
+    template_name = "college_form.html"
+    success_url = reverse_lazy('college')
+
+
 ############################# Program Starts ##############
 
 class ProgramList(ListView):
@@ -182,9 +202,16 @@ class ProgramCreateView(CreateView):
     template_name = "program_form.html"
     success_url = reverse_lazy('program')
 
+
     def form_valid(self,form):
         Student = form.instance.Student
         messages.success(self.request, f'{Student} has been successfully updated.')
 
         return super().form_valid(form)
 
+class ProgramUpdateView(UpdateView):
+    model = Program
+    fields = "__all__"
+    context_object_name = "program"
+    template_name = "program_form.html"
+    success_url = reverse_lazy('program')
