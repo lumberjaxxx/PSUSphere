@@ -9,13 +9,13 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">List of Organizations</div>
-                        <div class="card-category">Page Subtitle</div>
+                        <div class="card-title">List of Colleges</div>
+                        <div class="card-category"></div>
                     </div>
                     <br>
                     <div class="col-md-12 row">
                         <div class="col-md-6">
-                            <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'org_list' %}">
+                            <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'college' %}">
                                 <div class="input-group">
                                     <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{request.GET.q}}"/>
                                     <div class="input-group-append">
@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="pull-right">
-                                <a href="{% url 'org_add' %}" class="btn btn-success btn-rounded">Add Organization</a>
+                                <a href="{% url 'college_add' %}" class="btn btn-success btn-rounded">Add College</a>
                             </div>
                         </div>
                     </div>
@@ -36,21 +36,13 @@
                         <table class="table table-striped mt-3">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">College</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">College Name</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for object in object_list %}
                                     <tr>
-                                        <td>{{ object.name }}</td>
-                                        <td>{{ object.college }}</td>
-                                        <td>{{ object.description }}</td>
-                                        <td><a href="#">EDIT</a>
-                                        </td>
-
+                                        <td>{{ object.college_name }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -62,6 +54,5 @@
         </div>
     </div>
 </div>
-{% include 'includes/message.html' %}
 {% endblock %}
 

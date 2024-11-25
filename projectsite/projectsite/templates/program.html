@@ -15,7 +15,7 @@
                     <br>
                     <div class="col-md-12 row">
                         <div class="col-md-6">
-                            <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'org_list' %}">
+                            <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'program' %}">
                                 <div class="input-group">
                                     <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{request.GET.q}}"/>
                                     <div class="input-group-append">
@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="pull-right">
-                                <a href="{% url 'org_add' %}" class="btn btn-success btn-rounded">Add Organization</a>
+                                <a href="{% url 'program_add' %}" class="btn btn-success btn-rounded">Add Program</a>
                             </div>
                         </div>
                     </div>
@@ -36,19 +36,18 @@
                         <table class="table table-striped mt-3">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name</th>
+                                    <th scope="col">Program</th>
                                     <th scope="col">College</th>
-                                    <th scope="col">Description</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for object in object_list %}
                                     <tr>
-                                        <td>{{ object.name }}</td>
+                                        <td>{{ object.prog_name }}</td>
                                         <td>{{ object.college }}</td>
-                                        <td>{{ object.description }}</td>
-                                        <td><a href="#">EDIT</a>
+                                        <td>EDIT
+                                            DELETE
                                         </td>
 
                                     </tr>
