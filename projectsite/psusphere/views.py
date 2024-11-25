@@ -42,8 +42,8 @@ class OrganizationCreateView(CreateView):
     success_url = reverse_lazy('org_list')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        org_name = form.instance
+        messages.success(self.request, f'{org_name} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -82,8 +82,8 @@ class OrgMemberCreateView(CreateView):
     success_url = reverse_lazy('org_mem')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        orgmem= form.instance
+        messages.success(self.request, f'{orgmem} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -125,7 +125,7 @@ class StudentCreateView(CreateView):
 
 
     def form_valid(self,form):
-        Student = form.instance.Student
+        student_name = form.instance
         messages.success(self.request, f'{Student} has been successfully updated.')
 
         return super().form_valid(form)
@@ -163,8 +163,8 @@ class CollegeCreateView(CreateView):
     success_url = reverse_lazy('college')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        college_name = form.instance
+        messages.success(self.request, f'{college_name} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -204,8 +204,8 @@ class ProgramCreateView(CreateView):
 
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        prog_name = form.instance
+        messages.success(self.request, f'{Program} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -215,3 +215,4 @@ class ProgramUpdateView(UpdateView):
     context_object_name = "program"
     template_name = "program_form.html"
     success_url = reverse_lazy('program')
+  
