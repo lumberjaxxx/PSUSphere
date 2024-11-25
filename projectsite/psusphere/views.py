@@ -83,7 +83,7 @@ class OrgMemberCreateView(CreateView):
 
     def form_valid(self,form):
         student = form.instance.student
-        messages.success(self.request, f'{student} has been successfully updated.')
+        messages.success(self.request, f'{student} has been successfully added.')
 
         return super().form_valid(form)
 
@@ -126,7 +126,7 @@ class StudentCreateView(CreateView):
 
     def form_valid(self,form):
         student = form.instance.student_id
-        messages.success(self.request, f'{student} has been successfully updated.')
+        messages.success(self.request, f'{student} has been successfully added.')
 
         return super().form_valid(form)
 
@@ -164,7 +164,7 @@ class CollegeCreateView(CreateView):
 
     def form_valid(self,form):
         college = form.instance.college_name
-        messages.success(self.request, f'{college} has been successfully updated.')
+        messages.success(self.request, f'{college} has been successfully added.')
 
         return super().form_valid(form)
 
@@ -205,7 +205,7 @@ class ProgramCreateView(CreateView):
 
     def form_valid(self,form):
         program = form.instance.prog_name
-        messages.success(self.request, f'{program} has been successfully updated.')
+        messages.success(self.request, f'{program} has been successfully added.')
 
         return super().form_valid(form)
 
