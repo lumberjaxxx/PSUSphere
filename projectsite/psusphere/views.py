@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.views.generic.list import ListView 
 from django.views.generic.edit import CreateView 
 from psusphere.models import Organization, Student, OrgMember, Program, College
-from psusphere.forms import OrganizationForm
+from psusphere.forms import OrganizationForm, OrgMemberForm, StudentForm, ProgramForm, CollegeForm
 from django.urls import reverse_lazy
 from typing import Any
 from django.db.models.query import QuerySet
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 method_decorator(login_required, name='dispatch')
 
@@ -41,16 +42,16 @@ class OrganizationCreateView(CreateView):
     success_url = reverse_lazy('org_list')
 
 
-###############Organization member starts #########################
-    def get_queryset(self, *args, **kwargs):
-        qs = super(OrganizationCreateView, self).get_queryset(*args, **kwargs)
-        if self.request.GET.get('q') != None:
-            query = self.request.GET.get('q')
-            qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    # def get_queryset(self, *args, **kwargs):
+    #     qs = super(OrganizationCreateView, self).get_queryset(*args, **kwargs)
+    #     if self.request.GET.get('q') != None:
+    #         query = self.request.GET.get('q')
+    #         qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
             
-        return qs
+    #     return qs
 
 
+###############Organization member starts #########################
 class OrgMemberList(ListView):
     model = OrgMember
     context_object_name = "org_mem"
@@ -68,6 +69,12 @@ class OrgMemberList(ListView):
                 )
             
         return qs
+    
+class OrgMemberCreateView(CreateView):
+    model = OrgMember
+    form_class = OrgMemberForm
+    template_name = "orgmem_form.html"
+    success_url = reverse_lazy('org_mem')
     
 ############# Student list starts#######################333333
 class StudentList(ListView):
@@ -90,15 +97,15 @@ class StudentList(ListView):
                 )
             
         return qs
+    
+class StudentCreateView(CreateView):
+    model = Student
+    form_class = StudentForm
+    template_name = "student_form.html"
+    success_url = reverse_lazy('student')
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super(StudentList, self).get_queryset(*args, **kwargs)
-        if self.request.GET.get('q') != None:
-            query = self.request.GET.get('q')
-            qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
-            
-        return qs
 
+##################### College Starts ########################33
 class CollegeList(ListView):
     model = College
     context_object_name = "college"
@@ -112,6 +119,16 @@ class CollegeList(ListView):
             qs = qs.filter(Q(college_name__icontains=query))
             
         return qs
+    
+
+class CollegeCreateView(CreateView):
+    model = College
+    form_class = CollegeForm
+    template_name = "college_form.html"
+    success_url = reverse_lazy('college')
+
+
+############################# Program Starts ##############
 
 class ProgramList(ListView):
     model = Program
@@ -128,4 +145,9 @@ class ProgramList(ListView):
                 Q(college__college_name__icontains=query))
             
         return qs
-
+    
+class ProgramCreateView(CreateView):
+    model = Program
+    form_class = ProgramForm
+    template_name = "program_form.html"
+    success_url = reverse_lazy('program')
