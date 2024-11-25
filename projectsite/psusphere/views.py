@@ -40,7 +40,16 @@ class OrganizationCreateView(CreateView):
     template_name = "org_form.html"
     success_url = reverse_lazy('org_list')
 
+
 ###############Organization member starts #########################
+    def get_queryset(self, *args, **kwargs):
+        qs = super(OrganizationCreateView, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get('q') != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            
+        return qs
+
 
 class OrgMemberList(ListView):
     model = OrgMember
@@ -61,7 +70,6 @@ class OrgMemberList(ListView):
         return qs
     
 ############# Student list starts#######################333333
-
 class StudentList(ListView):
     model = Student
     context_object_name = "student"
@@ -80,6 +88,14 @@ class StudentList(ListView):
                 Q(program__prog_name__icontains=query) |
                 Q(college__college_name__icontains=query)
                 )
+            
+        return qs
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(StudentList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get('q') != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) | Q(description__icontains=query))
             
         return qs
 
@@ -112,3 +128,4 @@ class ProgramList(ListView):
                 Q(college__college_name__icontains=query))
             
         return qs
+
