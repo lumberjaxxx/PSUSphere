@@ -31,7 +31,6 @@
                                 <a href="{% url 'orgmem_add' %}" class="btn btn-success btn-rounded">Add Org Member</a>
                             </div>
                         </div>
-                    </div>
                 </div>
                     <div class="card-body">
                         <table class="table table-striped mt-3">
@@ -49,8 +48,8 @@
                                         <td>{{ object.student }}</td>
                                         <td>{{ object.organization }}</td>
                                         <td>{{ object.date_joined }}</td>
-                                        <td>EDIT
-                                            DELETE
+                                        <td><a href="#">EDIT</a>
+                                            <a href="#">DELETE</a>
                                         </td>
 
                                     </tr>
