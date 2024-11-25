@@ -42,8 +42,8 @@ class OrganizationCreateView(CreateView):
     success_url = reverse_lazy('org_list')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        name = form.instance.name
+        messages.success(self.request, f'{name} has been successfully added.')
 
         return super().form_valid(form)
 
@@ -82,8 +82,8 @@ class OrgMemberCreateView(CreateView):
     success_url = reverse_lazy('org_mem')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        student = form.instance.student
+        messages.success(self.request, f'{student} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -125,8 +125,8 @@ class StudentCreateView(CreateView):
 
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        student = form.instance.student_id
+        messages.success(self.request, f'{student} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -163,8 +163,8 @@ class CollegeCreateView(CreateView):
     success_url = reverse_lazy('college')
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        college = form.instance.college_name
+        messages.success(self.request, f'{college} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -174,7 +174,7 @@ class CollegeUpdateView(UpdateView):
     model = College
     fields = "__all__"
     context_object_name = "college"
-    template_name = "college_form.html"
+    template_name = "college_update_form.html"
     success_url = reverse_lazy('college')
 
 
@@ -204,8 +204,8 @@ class ProgramCreateView(CreateView):
 
 
     def form_valid(self,form):
-        Student = form.instance.Student
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        program = form.instance.prog_name
+        messages.success(self.request, f'{program} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -213,5 +213,5 @@ class ProgramUpdateView(UpdateView):
     model = Program
     fields = "__all__"
     context_object_name = "program"
-    template_name = "program_form.html"
+    template_name = "program_update_form.html"
     success_url = reverse_lazy('program')
