@@ -42,6 +42,14 @@ class OrganizationCreateView(CreateView):
     success_url = reverse_lazy('org_list')
 
 
+    def form_valid(self,form):
+        Student = form.instance.Student
+        messages.success(self.request, f'{Student} has been successfully updated.')
+
+        return super().form_valid(form)
+
+
+
     # def get_queryset(self, *args, **kwargs):
     #     qs = super(OrganizationCreateView, self).get_queryset(*args, **kwargs)
     #     if self.request.GET.get('q') != None:
@@ -75,6 +83,13 @@ class OrgMemberCreateView(CreateView):
     form_class = OrgMemberForm
     template_name = "orgmem_form.html"
     success_url = reverse_lazy('org_mem')
+
+    def form_valid(self,form):
+        Student = form.instance.Student
+        messages.success(self.request, f'{Student} has been successfully updated.')
+
+        return super().form_valid(form)
+
     
 ############# Student list starts#######################333333
 class StudentList(ListView):
@@ -105,6 +120,14 @@ class StudentCreateView(CreateView):
     success_url = reverse_lazy('student')
 
 
+    def form_valid(self,form):
+        Student = form.instance.Student
+        messages.success(self.request, f'{Student} has been successfully updated.')
+
+        return super().form_valid(form)
+
+
+
 ##################### College Starts ########################33
 class CollegeList(ListView):
     model = College
@@ -126,6 +149,13 @@ class CollegeCreateView(CreateView):
     form_class = CollegeForm
     template_name = "college_form.html"
     success_url = reverse_lazy('college')
+
+    def form_valid(self,form):
+        Student = form.instance.Student
+        messages.success(self.request, f'{Student} has been successfully updated.')
+
+        return super().form_valid(form)
+
 
 
 ############################# Program Starts ##############
@@ -151,3 +181,10 @@ class ProgramCreateView(CreateView):
     form_class = ProgramForm
     template_name = "program_form.html"
     success_url = reverse_lazy('program')
+
+    def form_valid(self,form):
+        Student = form.instance.Student
+        messages.success(self.request, f'{Student} has been successfully updated.')
+
+        return super().form_valid(form)
+
