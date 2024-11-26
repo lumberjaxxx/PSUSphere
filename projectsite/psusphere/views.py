@@ -126,7 +126,7 @@ class StudentCreateView(CreateView):
 
     def form_valid(self,form):
         student_name = form.instance
-        messages.success(self.request, f'{Student} has been successfully updated.')
+        messages.success(self.request, f'{student_name} has been successfully updated.')
 
         return super().form_valid(form)
 
@@ -205,7 +205,7 @@ class ProgramCreateView(CreateView):
 
     def form_valid(self,form):
         prog_name = form.instance
-        messages.success(self.request, f'{Program} has been successfully updated.')
+        messages.success(self.request, f'{prog_name} has been successfully updated.')
 
         return super().form_valid(form)
 
