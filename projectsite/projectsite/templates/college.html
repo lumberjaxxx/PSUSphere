@@ -43,6 +43,9 @@
                                 {% for object in object_list %}
                                     <tr>
                                         <td>{{ object.college_name }}</td>
+                                        <td><a href = "college/{{object.id}}">Edit</a>
+                                            <a href = "college/{{object.id}}/delete" class="text-danger">Delete</a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

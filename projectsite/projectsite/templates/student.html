@@ -54,8 +54,9 @@
                                         <td>{{ object.middlename }}</td>
                                         <td>{{ object.program }}</td>
                                         <td>{{ object.college }}</td>
-                                        <td>EDIT
-                                            DELETE
+                                        <td><a href = "student/{{object.id}}">Edit</a>
+                                            <a href = "student/{{object.id}}/delete" class="text-danger">Delete</a>
+                                        
                                         </td>
                                     </tr>
                                 {% endfor %}
