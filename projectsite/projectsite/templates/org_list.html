@@ -43,14 +43,12 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <p>{{ object_list }}</p>
                                 {% for object in object_list %}
                                     <tr>
                                         <td>{{ object.name }}</td>
                                         <td>{{ object.college }}</td>
                                         <td>{{ object.description }}</td>
-                                        <td><a href="org_list/{{object.id}}">EDIT</a>
-                                            <a href ="org_list/{{object.id}}/delete" class="text-danger">DELETE</a>
-                                        </td>
 
                                     </tr>
                                 {% endfor %}
@@ -63,6 +61,5 @@
         </div>
     </div>
 </div>
-{% include 'includes/message.html' %}
 {% endblock %}
 

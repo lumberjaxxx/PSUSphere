@@ -11,6 +11,14 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from django.db import connection
+from django.http import JsonResponse
+from django.db.models.functions import ExtractMonth
+
+from django.db.models import Count
+from datetime import datetime
+
+
 method_decorator(login_required, name='dispatch')
 
 class HomePageView(ListView):
@@ -18,11 +26,43 @@ class HomePageView(ListView):
     context_object_name = 'home'
     template_name = "home.html"
 
+class ChartView(ListView):
+    template_name = 'chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(). get_context_data(**kwargs)
+        return context
+    
+    def get_queryset(self, *args, **kwargs):
+        pass 
+
+def PieCountbySeverity(request):
+    query = '''
+        SELECT severity_level, COUNT(*) as count
+        FROM fire_incident
+        GROUP BY severity_level
+    '''
+    
+    data = {}
+    
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+    
+    if rows:
+        # Construct the dictionary with severity level as keys and count as values
+        data = {severity: count for severity, count in rows}
+    else:
+        data = {}
+    
+    return JsonResponse(data)
+
+
 class OrganizationList(ListView):
     model = Organization
     context_object_name = "organization"
-    template_name = "org_list.html"
-    paginated_by = 5
+    template_name = "organization/org_list.html"
+    paginate_by = 5
 
     def get_queryset(self, *args, **kwargs):
         qs = super(OrganizationList, self).get_queryset(*args, **kwargs)
@@ -38,7 +78,7 @@ class OrganizationList(ListView):
 class OrganizationCreateView(CreateView):
     model = Organization
     form_class = OrganizationForm
-    template_name = "org_form.html"
+    template_name = "organization/org_form.html"
     success_url = reverse_lazy('org_list')
 
 
@@ -46,7 +86,7 @@ class OrganizationUpdateView(UpdateView):
     model = Organization
     fields = "__all__"
     context_object_name = "organization"
-    template_name = "org_edit_form.html"
+    template_name = "organization/org_edit_form.html"
     success_url = reverse_lazy('org_list')
 
     def form_valid(self,form):
@@ -57,7 +97,7 @@ class OrganizationUpdateView(UpdateView):
 
 class OrganizationDeleteView(DeleteView):
     model = Organization
-    template_name = "org_del.html"
+    template_name = "organization/org_del.html"
     success_url = reverse_lazy('org_list')
 
     def form_valid(self, form):
@@ -69,8 +109,8 @@ class OrganizationDeleteView(DeleteView):
 class OrgMemberList(ListView):
     model = OrgMember
     context_object_name = "org_mem"
-    template_name = "org_mem.html"
-    paginated = 2
+    template_name = "orgmember/org_mem.html"
+    paginate_by = 2
 
     def get_queryset(self, *args, **kwargs):
         qs = super(OrgMemberList, self).get_queryset(*args, **kwargs)
@@ -87,7 +127,15 @@ class OrgMemberList(ListView):
 class OrgMemberCreateView(CreateView):
     model = OrgMember
     form_class = OrgMemberForm
-    template_name = "orgmem_form.html"
+    template_name = "orgmember/orgmem_form.html"
+    success_url = reverse_lazy('org_mem')
+
+
+class OrgMemberUpdateView(UpdateView):
+    model = OrgMember
+    fields = "__all__"
+    context_object_name = "org_mem"
+    template_name = "orgmember/orgmem_form.html"
     success_url = reverse_lazy('org_mem')
 
     def form_valid(self,form):
@@ -96,17 +144,9 @@ class OrgMemberCreateView(CreateView):
 
         return super().form_valid(form)
 
-class OrgMemberUpdateView(UpdateView):
-    model = OrgMember
-    fields = "__all__"
-    context_object_name = "org_mem"
-    template_name = "orgmem_form.html"
-    success_url = reverse_lazy('org_mem')
-
-
 class OrgMemberDeleteView(DeleteView):
     model = OrgMember
-    template_name = "orgmem_del.html"
+    template_name = "orgmember/orgmem_del.html"
     success_url = reverse_lazy('org_mem')
 
     def form_valid(self, form):
@@ -118,8 +158,8 @@ class OrgMemberDeleteView(DeleteView):
 class StudentList(ListView):
     model = Student
     context_object_name = "student"
-    template_name = "student.html"
-    paginated = 5
+    template_name = "student/student.html"
+    paginate_by = 5
     
     def get_queryset(self, *args, **kwargs):
         qs = super(StudentList, self).get_queryset(*args, **kwargs)
@@ -139,14 +179,14 @@ class StudentList(ListView):
 class StudentCreateView(CreateView):
     model = Student
     form_class = StudentForm
-    template_name = "student_form.html"
+    template_name = "student/student_form.html"
     success_url = reverse_lazy('student')
 
 class StudentUpdateView(UpdateView):
     model = Student
     fields = "__all__"
     context_object_name = "student"
-    template_name = "stud_edit_form.html"
+    template_name = "student/stud_edit_form.html"
     success_url = reverse_lazy('student')
 
     def form_valid(self,form):
@@ -157,7 +197,7 @@ class StudentUpdateView(UpdateView):
     
 class StudentDeleteView(DeleteView):
     model = Student
-    template_name = "student_del.html"
+    template_name = "student/student_del.html"
     success_url = reverse_lazy('student')
 
     def form_valid(self, form):
@@ -169,8 +209,8 @@ class StudentDeleteView(DeleteView):
 class CollegeList(ListView):
     model = College
     context_object_name = "college"
-    template_name = "college.html"
-    paginated = 3
+    template_name = "college/college.html"
+    paginate_by = 3
 
     def get_queryset(self, *args, **kwargs):
         qs = super(CollegeList, self).get_queryset(*args, **kwargs)
@@ -184,7 +224,7 @@ class CollegeList(ListView):
 class CollegeCreateView(CreateView):
     model = College
     form_class = CollegeForm
-    template_name = "college_form.html"
+    template_name = "college/college_form.html"
     success_url = reverse_lazy('college')
 
     def form_valid(self,form):
@@ -199,12 +239,12 @@ class CollegeUpdateView(UpdateView):
     model = College
     fields = "__all__"
     context_object_name = "college"
-    template_name = "college_form.html"
+    template_name = "college/college_form.html"
     success_url = reverse_lazy('college')
 
 class CollegeDeleteView(DeleteView):
     model = College
-    template_name = "college_del.html"
+    template_name = "college/college_del.html"
     success_url = reverse_lazy('college')
 
     def form_valid(self, form):
@@ -217,8 +257,8 @@ class CollegeDeleteView(DeleteView):
 class ProgramList(ListView):
     model = Program
     context_object_name = "program"
-    template_name = "program.html"
-    paginated = 2
+    template_name = "program/program.html"
+    paginate_by = 2
 
     def get_queryset(self, *args, **kwargs):
         qs = super(ProgramList, self).get_queryset(*args, **kwargs)
@@ -233,7 +273,7 @@ class ProgramList(ListView):
 class ProgramCreateView(CreateView):
     model = Program
     form_class = ProgramForm
-    template_name = "program_form.html"
+    template_name = "program/program_form.html"
     success_url = reverse_lazy('program')
 
 
@@ -247,12 +287,12 @@ class ProgramUpdateView(UpdateView):
     model = Program
     fields = "__all__"
     context_object_name = "program"
-    template_name = "program_form.html"
+    template_name = "program/program_form.html"
     success_url = reverse_lazy('program')
 
 class ProgramDeleteView(DeleteView):
     model = Program
-    template_name = "program_del.html"
+    template_name = "program/program_del.html"
     success_url = reverse_lazy('program')
 
     def form_valid(self, form):

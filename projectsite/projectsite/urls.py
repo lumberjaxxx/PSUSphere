@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from psusphere import views
 from django.contrib.auth import views as auth_views
-from psusphere.views import HomePageView, OrganizationList, OrganizationCreateView, OrgMemberList, StudentList, ProgramList, CollegeList, OrgMemberCreateView, StudentCreateView, ProgramCreateView, CollegeCreateView
+from psusphere.views import HomePageView, OrganizationList, OrganizationCreateView, OrgMemberList, StudentList, ProgramList, CollegeList, OrgMemberCreateView, StudentCreateView, ProgramCreateView, CollegeCreateView, ChartView,PieCountbySeverity
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationDeleteView, OrgMemberDeleteView,StudentDeleteView,ProgramDeleteView,CollegeDeleteView
@@ -26,6 +26,8 @@ from psusphere.views import OrganizationDeleteView, OrgMemberDeleteView,StudentD
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name="home"), #home
+    path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
+    path('chart/', PieCountbySeverity, name='chart'),
 
     path('orglist/', OrganizationList.as_view(), name='org_list'),
     path('orglist/add/', OrganizationCreateView.as_view(), name='org_add'),  ##### adding in forms
@@ -50,9 +52,9 @@ urlpatterns = [
     path('program/<pk>/edit', ProgramUpdateView.as_view(), name='program_edit'),
     path('program/<pk>/edit', ProgramDeleteView.as_view(), name='program_del'),
 
-    path('college', CollegeList.as_view(), name='college'),
+    path('college/', CollegeList.as_view(), name='college'),
     path('college/add/', CollegeCreateView.as_view(), name='college_add'),
-    path('college/edit/', CollegeUpdateView.as_view(), name='college_edit'),
-    path('college/<pk>/edit', CollegeDeleteView.as_view(), name='college_del'),
+    path('college/<pk>/edit/', CollegeUpdateView.as_view(), name='college_edit'),
+    path('college/<pk>/delete/', CollegeDeleteView.as_view(), name='college_del'),
 
 ]
