@@ -29,9 +29,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name="home"), #home
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
-    path('chart/', PieCountbySeverity, name='chart'),
-    path('multilineChart/', MultilineIncidentTop3Country, name='chart'),
-    path('multiBarChart/', multipleBarbySeverity, name='chart'),
+    path('home/', PieCountbySeverity, name='chart'),
+    path('home/multilineChart/', MultilineIncidentTop3Country, name='chart'),
+    path('home/multiBarChart/', multipleBarbySeverity, name='chart'),
 
 
 

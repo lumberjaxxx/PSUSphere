@@ -285,22 +285,22 @@
 <script src="{% static 'js/ready.min.js' %}"></script>
 
 <script>
-	const nav = document.querySelector(".navigation")
-	const currentUrl = window.location.href 
-	const currentPage = currentUrl.split("/")[3]
+	const nav = document.querySelector(".navigation");
+	const currentUrl = window.location.href;
+	const currentPage = currentUrl.split("/")[3] || ""; // Handle empty path
 
-	const navItems = nav.querySelectorAll(".nav-item")
+	const navItems = nav.querySelectorAll(".nav-item");
 
-	navItems.forEach(function(navItems){
-		let navItemName = navItems.classname.split(" ")[1]
+	navItems.forEach(function(navItem) {
+		let navItemName = navItem.className.split(" ")[1];
 
-		if (navItemName==currentPage){
-			navItems.classlist.add("active")
+		if (navItemName === currentPage) {
+			navItem.classList.add("active");
 		}
 
-		if((currentPage==" ") && (navItemName=="home")){
-			navItems.classlist.add("active")
+		if ((currentPage === "") && (navItemName === "home")) {
+			navItem.classList.add("active");
 		}
-	})
+	});
 	</script>
 </html>

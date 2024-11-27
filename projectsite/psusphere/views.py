@@ -27,7 +27,7 @@ class HomePageView(ListView):
     template_name = "home.html"
 
 class ChartView(ListView):
-    template_name = 'chart.html'
+    template_name = 'base.html'
 
     def get_context_data(self, **kwargs):
         context = super(). get_context_data(**kwargs)
