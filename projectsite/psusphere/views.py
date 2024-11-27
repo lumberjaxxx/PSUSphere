@@ -50,10 +50,16 @@ class OrganizationCreateView(CreateView):
 
 class OrganizationUpdateView(UpdateView):
     model = Organization
-    fields = "__all__"
+    form_class = OrganizationForm
     context_object_name = "organization"
-    template_name = "org_edit_form.html"
+    template_name = "org_form.html"
     success_url = reverse_lazy('org_list')
+
+    def form_valid(self,form):
+        name = form.instance.name
+        messages.success(self.request, f'{name} has been successfully updated.')
+
+        return super().form_valid(form)
 
 
 ###############Organization member starts #########################

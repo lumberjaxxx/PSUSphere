@@ -34,17 +34,17 @@ urlpatterns = [
 
     path('org_mem/', OrgMemberList.as_view(), name="org_mem"),
     path('orgmem/add/', OrgMemberCreateView.as_view(), name='orgmem_add'),
-    path('orgmem/edit/', OrganizationUpdateView.as_view(), name='orgmem_edit'),
+    path('orgmem/edit/<pk>/', OrganizationUpdateView.as_view(), name='orgmem_edit'),
 
     path('student/', StudentList.as_view(), name="student"),
     path('student/add/', StudentCreateView.as_view(), name='student_add'),
-    path('student/edit/', OrganizationUpdateView.as_view(), name='student_edit'),
+    path('student/edit/<pk>/', OrganizationUpdateView.as_view(), name='student_edit'),
 
     path('program/', ProgramList.as_view(), name='program'),
     path('program/add/', ProgramCreateView.as_view(), name='program_add'),
-    path('program/edit/', OrganizationUpdateView.as_view(), name='program_edit'),
+    path('program/edit/<pk>/', OrganizationUpdateView.as_view(), name='program_edit'),
 
     path('college', CollegeList.as_view(), name='college'),
     path('college/add/', CollegeCreateView.as_view(), name='college_add'),
-    path('college/edit/', OrganizationUpdateView.as_view(), name='college_edit'),
+    path('college/edit/<pk>/', OrganizationUpdateView.as_view(), name='college_edit'),
 ]
