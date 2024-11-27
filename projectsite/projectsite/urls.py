@@ -18,21 +18,27 @@ from django.contrib import admin
 from django.urls import path, re_path
 from psusphere import views
 from django.contrib.auth import views as auth_views
-from psusphere.views import HomePageView, OrganizationList, OrganizationCreateView, OrgMemberList, StudentList, ProgramList, CollegeList, OrgMemberCreateView, StudentCreateView, ProgramCreateView, CollegeCreateView, ChartView,PieCountbySeverity
+from psusphere.views import OrganizationList, OrganizationCreateView, OrgMemberList, StudentList, ProgramList, CollegeList, OrgMemberCreateView, StudentCreateView, ProgramCreateView, CollegeCreateView
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationDeleteView, OrgMemberDeleteView,StudentDeleteView,ProgramDeleteView,CollegeDeleteView
+
+from psusphere.views import HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth,MultilineIncidentTop3Country, multipleBarbySeverity
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name="home"), #home
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
     path('chart/', PieCountbySeverity, name='chart'),
+    path('multilineChart/', MultilineIncidentTop3Country, name='chart'),
+    path('multiBarChart/', multipleBarbySeverity, name='chart'),
+
+
 
     path('orglist/', OrganizationList.as_view(), name='org_list'),
     path('orglist/add/', OrganizationCreateView.as_view(), name='org_add'),  ##### adding in forms
     path('orglist/<pk>/edit', OrganizationUpdateView.as_view(), name='org_edit'),
-    path('org_list/<pk>/delete', OrganizationDeleteView.as_view(), name='org_del'),
+    path('orglist/<pk>/delete', OrganizationDeleteView.as_view(), name='org_del'),
 
     re_path(r'^login/$',auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     re_path(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),

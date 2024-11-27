@@ -48,8 +48,8 @@
                                         <td>{{ object.name }}</td>
                                         <td>{{ object.college }}</td>
                                         <td>{{ object.description }}</td>
-                                        <td><a href="org_list/{{object.id}}">EDIT</a>
-                                            <a href ="org_list/{{object.id}}/delete" class="text-danger">DELETE</a>
+                                        <td><a href="{% url 'org_edit' object.id %}">Edit</a>
+                                            <a href="{% url 'org_del' object.id %}" class="text-danger">Delete</a>
                                         </td>
 
                                     </tr>
