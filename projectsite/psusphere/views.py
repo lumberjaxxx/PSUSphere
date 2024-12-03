@@ -19,7 +19,7 @@ from django.db.models import Count
 from datetime import datetime
 
 
-method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 
 class HomePageView(ListView):
     model = Organization
