@@ -70,7 +70,7 @@ def LineCountbyMonth(request):
     current_year = datetime.now().year
     result = {month: 0 for month in range (1, 13)}
 
-    incidents_per_month = Incident.objects.filter.filter(date_time__year=current_year) \
+    incidents_per_month = incident.objects.filter.filter(date_time__year=current_year) \
         .values_list('date_time',flat=True)
     
     #counting the number of incidents per month
@@ -222,6 +222,12 @@ class OrganizationCreateView(CreateView):
     template_name = "organization/org_form.html"
     success_url = reverse_lazy('org_list')
 
+    def form_valid(self,form):
+        name = form.instance.name
+        messages.success(self.request, f'{name} has been successfully added.')
+
+        return super().form_valid(form)
+
 
 class OrganizationUpdateView(UpdateView):
     model = Organization
@@ -271,6 +277,11 @@ class OrgMemberCreateView(CreateView):
     template_name = "orgmember/orgmem_form.html"
     success_url = reverse_lazy('org_mem')
 
+    def form_valid(self,form):
+        student = form.instance.student
+        messages.success(self.request, f'{student} has been successfully added.')
+
+        return super().form_valid(form)
 
 class OrgMemberUpdateView(UpdateView):
     model = OrgMember
@@ -323,6 +334,15 @@ class StudentCreateView(CreateView):
     template_name = "student/student_form.html"
     success_url = reverse_lazy('student')
 
+
+    def form_valid(self,form):
+        student = form.instance.student_id
+        messages.success(self.request, f'{student} has been successfully added.')
+
+        return super().form_valid(form)
+
+
+
 class StudentUpdateView(UpdateView):
     model = Student
     fields = "__all__"
@@ -369,8 +389,8 @@ class CollegeCreateView(CreateView):
     success_url = reverse_lazy('college')
 
     def form_valid(self,form):
-        college_name = form.instance
-        messages.success(self.request, f'{college_name} has been successfully updated.')
+        college = form.instance.college_name
+        messages.success(self.request, f'{college} has been successfully added.')
 
         return super().form_valid(form)
 
@@ -419,8 +439,8 @@ class ProgramCreateView(CreateView):
 
 
     def form_valid(self,form):
-        prog_name = form.instance
-        messages.success(self.request, f'{prog_name} has been successfully updated.')
+        program = form.instance.prog_name
+        messages.success(self.request, f'{program} has been successfully added.')
 
         return super().form_valid(form)
 
