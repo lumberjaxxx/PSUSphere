@@ -30,8 +30,9 @@ urlpatterns = [
     path('', views.HomePageView.as_view(), name="home"), #home
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
     path('home/', PieCountbySeverity, name='chart'),
-    path('home/multilineChart/', MultilineIncidentTop3Country, name='chart'),
-    path('home/multiBarChart/', multipleBarbySeverity, name='chart'),
+    path('home/lineChart', LineCountbyMonth, name = "line-chart"),
+    path('home/multilineChart/', MultilineIncidentTop3Country, name='multiline-chart'),
+    path('home/multiBarChart/', multipleBarbySeverity, name='multibar-chart'),
 
 
 

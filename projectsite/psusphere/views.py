@@ -25,9 +25,21 @@ class HomePageView(ListView):
     model = Organization
     context_object_name = 'home'
     template_name = "home.html"
+    paginate_by = 5
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) |
+                            Q(description__icontains=query))
+        return qs 
+                            
 
 class ChartView(ListView):
-    template_name = 'base.html'
+    template_name = 'chart.html'
 
     def get_context_data(self, **kwargs):
         context = super(). get_context_data(**kwargs)
@@ -167,6 +179,25 @@ def multipleBarbySeverity(request):
         result[level] = dict(sorted(result[level].items()))
 
     return JsonResponse
+
+def map_incidents(request):
+     incidents = Incident.objects.select_related("location").values(
+          "location_name", "location_latitude", "location_longitude", 
+          "date_time", "severity_level", "description"
+     )
+
+     incidents_list = [
+          {
+               "name": incident["location_name"],
+               "latitude": float(incident["location_latitude"]),
+               "longitude": float(incident["location_longitude"]),
+               "date_time": incident["date_time"].strftime("%Y-%m-%d %H:%H:%S") if incident["date_time"] else "N/A",
+               "severity_level": incident["severity_level"],
+               "description": incident["description"],
+          }
+          for incident in incidents
+     ]
+     return render(request, "map_incidents.html", {"fireIncidents": incidents_list})
 
 class OrganizationList(ListView):
     model = Organization
