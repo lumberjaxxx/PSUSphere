@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Home</h4>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Members of Organizations</div>
+                        <div class="card-category">Page Subtitle</div>
+                    </div>
+                    <br>
+                    <div class="col-md-12 row">
+                        <div class="col-md-6">
+                            <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'org_mem' %}">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{request.GET.q}}"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <i class="la la-search search-icon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pull-right">
+                                <a href="{% url 'orgmem_add' %}" class="btn btn-success btn-rounded">Add Org Member</a>
+                            </div>
+                        </div>
+                </div>
+                    <div class="card-body">
+                        <table class="table table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Student</th>
+                                    <th scope="col">Organization</th>
+                                    <th scope="col">Date Joined</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ object.student }}</td>
+                                        <td>{{ object.organization }}</td>
+                                        <td>{{ object.date_joined }}</td>
+<<<<<<< HEAD:projectsite/projectsite/templates/org_mem.html
+                                        <td><a href="edit/{{object.id}}">EDIT</a>
+                                            <a href="#">DELETE</a>
+=======
+                                        <td><a href="{% url 'orgmem_edit' object.id %}">Edit</a>
+                                            <a href="{% url 'orgmem_del' object.id %}" class="text-danger">Delete</a>
+>>>>>>> b14f34ae84be28ae196578ffb216cb7643c9d1f2:projectsite/projectsite/templates/orgmember/org_mem.html
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% include 'includes/pagination.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'includes/message.html' %}
+{% endblock %}
+
