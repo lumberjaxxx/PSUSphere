@@ -23,15 +23,16 @@ from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, College
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationDeleteView, OrgMemberDeleteView,StudentDeleteView,ProgramDeleteView,CollegeDeleteView
 
-from psusphere.views import HomePageView, ChartView, PieCountbySeverity, LineCountbyMonth,MultilineIncidentTop3Country, multipleBarbySeverity
+from psusphere.views import HomePageView, ChartView, PieCountbyStudent, LineCountbyMonth,timeline_of_org, popular_organization, barcountStudent
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomePageView.as_view(), name="home"), #home
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
-    path('home/', PieCountbySeverity, name='chart'),
-    path('home/multilineChart/', MultilineIncidentTop3Country, name='chart'),
-    path('home/multiBarChart/', multipleBarbySeverity, name='chart'),
+    path('home/piechart/', PieCountbyStudent, name='pie-chart'),
+    path('home/lineChart/', LineCountbyMonth, name='line-chart'),
+    path('home/multiBarChart/', popular_organization, name='mulbar-chart'),
+    path('home/barChart/', barcountStudent, name='barchart'),
 
 
 
