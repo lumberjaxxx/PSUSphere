@@ -36,11 +36,17 @@ class ChartView(ListView):
     def get_queryset(self, *args, **kwargs):
         pass 
 
-def PieCountbySeverity(request):
+def PieCountbyStudent(request):
     query = '''
-        SELECT severity_level, COUNT(*) as count
-        FROM fire_incident
-        GROUP BY severity_level
+    SELECT 
+        p.prog_name AS program_name, 
+        COUNT(s.id) AS student_count
+    FROM 
+        psusphere_student AS s
+    JOIN 
+        psusphere_program AS p ON s.program_id = p.id 
+    GROUP BY 
+        p.prog_name;
     '''  
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -48,24 +54,50 @@ def PieCountbySeverity(request):
     
     if rows:
         # Construct the dictionary with severity level as keys and count as values
-        data = {severity: count for severity, count in rows}
+        data = {program_name: student_count for program_name, student_count in rows}
     else:
         data = {}
     
     return JsonResponse(data)
 
+def barcountStudent(request):
+    query = '''
+    SELECT 
+        p.prog_name AS program_name, 
+        COUNT(s.id) AS student_count
+    FROM 
+        psusphere_student AS s
+    JOIN 
+        psusphere_program AS p ON s.program_id = p.id 
+    GROUP BY 
+        p.prog_name;
+    '''  
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+    
+    if rows:
+        # Construct the dictionary with severity level as keys and count as values
+        data = {program_name: student_count for program_name, student_count in rows}
+    else:
+        data = {}
+    
+    return JsonResponse(data)
+
+
 def LineCountbyMonth(request):
     current_year = datetime.now().year
     result = {month: 0 for month in range (1, 13)}
 
-    incidents_per_month = incident.objects.filter.filter(date_time__year=current_year) \
-        .values_list('date_time',flat=True)
+    members_per_month = OrgMember.objects.filter(date_joined__year=current_year) \
+        .values_list('date_joined',flat=True)
     
     #counting the number of incidents per month
 
-    for date_time in incidents_per_month:
-        month = date_time.month
-        result[month] +=1
+    for date_joined in members_per_month:
+        if date_joined:
+            month = date_joined.month
+            result[month] +=1
 
     #convert month numbers into month name
     month_names = {
@@ -78,95 +110,72 @@ def LineCountbyMonth(request):
     
     return JsonResponse(result_with_month_names)
 
-def MultilineIncidentTop3Country(request):
-    query = '''
-        SELECT 
-        fl.country,
-        strftime('%m, fi.date_time) AS month,
-        COUNT(fi.id) AS incident_count
-    FROM
-        fire_incident fi
-    JOIN
-        fire_locations fl ON fi.location_id=fl.id
-    WHERE
-        fl.country IN(
-            SELECT
-                fl_top.country
-            FROM
-                fire_incident fi_top
-            JOIN 
-                fire_locations fl_top ON fi_top.location_id = fl_top.id
-            WHERE
-                strftime('%Y', fi_top.date_time) = strftime('%y', 'now')
-            GROUP BY
-                fl_top.country
-            ORDER BY
-                COUNT(fi_top.id) DESC
-            LIMIT 3
-            )
-        AND strftime ('%Y', fi.date_time) = strftime('%Y', 'now')
-    GROUP BY
-        fl.country, month
-    ORDER BY
-        fl.country, month
-    '''
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
+def timeline_of_org(request): #multiline
+    data = (
+        OrgMember.objects.values('date_joined')
+        .annotate(member_count=Count('id'))
+        .order_by('date_joined')
+    )
+        
+    labels = [entry['date_joined'].strftime('%Y-%m-%d') for entry in data]
+    counts = [entry['member_count'] for entry in data]
 
-    #initialize a dictionary to store the result
-    result = {}
+    response_data = {
+        "labels": labels,  
+        "datasets": [
+            {
+                "label": "New Members",
+                "data": counts,  
+                "backgroundColor": "rgba(54, 162, 235, 0.5)",  
+                "borderColor": "rgba(54, 162, 235, 1)",
+                "borderWidth": 1,
+            }
+        ],
+    }
 
-    #initialize a set of months from Jan to dec
-    months = set(str(1).zfill(2) for i in range (1, 13))
+    return JsonResponse(response_data)
 
-    #loop through query results
-    for row in rows:
-        country = row[0]
-        month = row[1]
-        total_incidents = row[2]
+def popular_organization(request): #circle graph
+    data = (
+        OrgMember.objects
+        .values('organization__college__college_name', 'organization__name')
+        .annotate(member_count=Count('id'))
+        .order_by('organization__college__college_name', '-member_count')
+    )
 
-        if country not in result:
-            result[country] - {month: 0 for month in months}
-        result[country][month] = total_incidents
-    while len(result) < 3:
-        missing_country = f"Country{len(result) + 1}"
-        result[missing_country] = {month: 0 for month in months}
 
-    for country in result:
-        result[country] = dict(sorted(result[country].items()))
-    return JsonResponse
+    college_data = {}
+    for entry in data:
+        college_name = entry['organization__college__college_name']
+        organization_name = entry['organization__name']
+        member_count = entry['member_count']
 
-def multipleBarbySeverity(request):
-    query = '''
-    SELECT
-        fl.severity_level,
-        strftime('%m', fi.data_time) AS month,
-        COUNT(fi.id) AS incident_count
-    FROM
-        fire_incident fi
-    GROUP BY fi.severity_level, month
-    '''
+        if college_name not in college_data:
+            college_data[college_name] = {
+                "organization": organization_name,
+                "members": member_count
+            }
 
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
 
-    result = {}
-    months = set(str(i).zfill(2) for i in range (1, 13))
+    labels = list(college_data.keys())  
+    counts = [info['members'] for info in college_data.values()]  
+    organizations = [info['organization'] for info in college_data.values()]  
 
-    for row in rows:
-        level = str(row[0])
-        month = row[1]
-        total_incidents = row[2]
+    response_data = {
+        "labels": labels,
+        "datasets": [
+            {
+                "label": "Most Popular Organization",
+                "data": counts,  
+                "backgroundColor": "rgba(75, 192, 192, 0.5)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 1,
+            }
+        ],
+        "organization_names": organizations, 
+    }
 
-        if level not in result:
-            result[level] = {month: 0 for month in months}
-        result[level][month] = total_incidents
-    for level in result:
-        result[level] = dict(sorted(result[level].items()))
-
-    return JsonResponse
+    return JsonResponse(response_data)
 
 class OrganizationList(ListView):
     model = Organization
