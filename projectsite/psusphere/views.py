@@ -60,6 +60,30 @@ def PieCountbyStudent(request):
     
     return JsonResponse(data)
 
+def CircleCountbyStudent(request):
+    query = '''
+    SELECT 
+        p.prog_name AS program_name, 
+        COUNT(s.id) AS student_count
+    FROM 
+        psusphere_student AS s
+    JOIN 
+        psusphere_program AS p ON s.program_id = p.id 
+    GROUP BY 
+        p.prog_name;
+    '''  
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+    
+    if rows:
+        # Construct the dictionary with severity level as keys and count as values
+        data = {program_name: student_count for program_name, student_count in rows}
+    else:
+        data = {}
+    
+    return JsonResponse(data)
+
 def barcountStudent(request):
     query = '''
     SELECT 
