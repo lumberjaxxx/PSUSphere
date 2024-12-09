@@ -48,8 +48,13 @@
                                         <td>{{ object.student }}</td>
                                         <td>{{ object.organization }}</td>
                                         <td>{{ object.date_joined }}</td>
+<<<<<<< HEAD:projectsite/projectsite/templates/org_mem.html
+                                        <td><a href="edit/{{object.id}}">EDIT</a>
+                                            <a href="#">DELETE</a>
+=======
                                         <td><a href="{% url 'orgmem_edit' object.id %}">Edit</a>
                                             <a href="{% url 'orgmem_del' object.id %}" class="text-danger">Delete</a>
+>>>>>>> b14f34ae84be28ae196578ffb216cb7643c9d1f2:projectsite/projectsite/templates/orgmember/org_mem.html
                                         </td>
 
                                     </tr>

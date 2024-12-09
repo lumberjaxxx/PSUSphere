@@ -233,7 +233,7 @@ class OrganizationCreateView(CreateView):
 
 class OrganizationUpdateView(UpdateView):
     model = Organization
-    fields = "__all__"
+    form_class = OrganizationForm
     context_object_name = "organization"
     template_name = "organization/org_edit_form.html"
     success_url = reverse_lazy('org_list')
