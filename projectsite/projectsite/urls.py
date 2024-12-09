@@ -23,7 +23,7 @@ from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, College
 from psusphere.views import OrganizationUpdateView, OrgMemberUpdateView, CollegeUpdateView, ProgramUpdateView, StudentUpdateView
 from psusphere.views import OrganizationDeleteView, OrgMemberDeleteView,StudentDeleteView,ProgramDeleteView,CollegeDeleteView
 
-from psusphere.views import HomePageView, ChartView, PieCountbyStudent, LineCountbyMonth,timeline_of_org, popular_organization, barcountStudent
+from psusphere.views import HomePageView, ChartView, PieCountbyStudent, LineCountbyMonth,timeline_of_org, popular_organization, barcountStudent,CircleCountbyStudent
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,8 +31,8 @@ urlpatterns = [
     path('dashboard_chart', ChartView.as_view(), name='dashboard-chart'),
     path('home/piechart/', PieCountbyStudent, name='pie-chart'),
     path('home/lineChart/', LineCountbyMonth, name='line-chart'),
-    path('home/multiBarChart/', popular_organization, name='mulbar-chart'),
     path('home/barChart/', barcountStudent, name='barchart'),
+    path('home/doughnut/', CircleCountbyStudent, name='doughnut'),
 
 
 
